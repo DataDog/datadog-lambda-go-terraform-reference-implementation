@@ -5,9 +5,11 @@
 - Makefile  
 - README.md  
 
+
 -  main.tf: Sets up the Terraform provider and some variables
 -  apigateway.tf: Sets up API Gateway so we can call our Lambda function via HTTPS
 -  lambda.tf: Sets up the Lambda function, adds Datadog Extension and environment variables. Set your `DD_API_KEY` or `DD_API_KEY_SECRET_ARN` here.
+
 
 -  main.go: Our lambda function. Instrumented using `Datadog-Lambda-Go`. 
 -  go.mod: Dependencies for the lambda function
