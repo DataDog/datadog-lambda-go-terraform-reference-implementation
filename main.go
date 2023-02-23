@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/DataDog/datadog-lambda-go"
+	"github.com/DataDog/datadog-lambda-go" // <-- Datadog Lambda library for Go
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
@@ -25,7 +25,7 @@ func Handler(ctx context.Context) (Response, error) {
 	log.Println("Hello there!")
 	fmt.Println("Another hello?")
 
-	ddlambda.Metric("agocs.some.metric", // Metric name
+	ddlambda.Metric("agocs.some.metric", // Metric name <-- Custom metric
 		12.45,                           // Metric value
 		"product:latte", "order:online", // Associated tags
 	)
@@ -52,5 +52,5 @@ func Handler(ctx context.Context) (Response, error) {
 }
 
 func main() {
-	lambda.Start(ddlambda.WrapFunction(Handler, nil))
+	lambda.Start(ddlambda.WrapFunction(Handler, nil)) // <-- Lambda handler wrapped with ddlambda.WrapFunction
 }
