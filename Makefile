@@ -1,8 +1,8 @@
 .PHONY: build clean deploy
 
 build:
-		GOOS=linux GOARCH=amd64 go build -v -ldflags '-d -s -w' -a -tags netgo -installsuffix netgo -o build/bin/app main.go
-
+	GOARCH=arm64 GOOS=linux go build -tags lambda.norpc -o ./build/bin/bootstrap
+	(cd build/bin && zip -FS bootstrap.zip bootstrap)
 clean:
 	rm -rf ./build
 
@@ -13,7 +13,7 @@ plan:
 	terraform plan
 
 apply:
-	terraform apply --auto-approve
+	terraform apply
 
 destroy:
-	terraform destroy --auto-approve
+	terraform destroy
