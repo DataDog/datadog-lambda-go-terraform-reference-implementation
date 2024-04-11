@@ -1,11 +1,12 @@
 resource "aws_lambda_function" "lambda_func" {
   filename         = data.archive_file.lambda_zip.output_path
   function_name    = local.app_id
-  handler          = "app"
+  handler          = "bootstrap"
   source_code_hash = base64sha256(data.archive_file.lambda_zip.output_path)
-  runtime          = "go1.x"
+  runtime          = "provided.al2"
   role             = aws_iam_role.lambda_exec.arn
   timeout = 30
+  architectures = ["arm64"]
 #  memory_size = 1024
   environment {
     variables = {
@@ -22,7 +23,7 @@ resource "aws_lambda_function" "lambda_func" {
 #      DD_LOG_LEVEL = "debug"
     }
   }
-  layers = ["arn:aws:lambda:us-west-2:464622532012:layer:Datadog-Extension:37"]
+  layers = ["arn:aws:lambda:us-west-2:464622532012:layer:Datadog-Extension-ARM:56"]
 }
 
 # Assume role setup
@@ -57,9 +58,8 @@ variable "iam_policy_arn" {
   ]
 }
 
-resource "aws_iam_policy_attachment" "role_attach" {
-  name       = "policy-${local.app_id}"
-  roles      = [aws_iam_role.lambda_exec.id]
+resource "aws_iam_role_policy_attachment" "role_attach" {
+  role      = aws_iam_role.lambda_exec.id
   count      = length(var.iam_policy_arn)
   policy_arn = element(var.iam_policy_arn, count.index)
 }
